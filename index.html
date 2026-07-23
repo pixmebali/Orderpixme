@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - Pixme Photobooth</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
+        body { margin: 0; padding: 0; background-color: #f2f4f1; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .container { width: 100%; max-width: 450px; background-color: #fafafa; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); padding: 30px 25px; box-sizing: border-box; }
+        .form-section { display: block; }
+        .header-logo { text-align: center; margin-bottom: 25px; }
+        .header-logo h1 { font-family: 'Playfair Display', serif; color: #4a4a4a; margin: 0; font-size: 28px; }
+        .header-logo p { color: #6d8c6b; margin: 5px 0 0 0; font-size: 14px; }
+        .form-group { margin-bottom: 15px; }
+        .input-wrapper { background-color: #e6e9e4; border-radius: 12px; padding: 12px 15px; }
+        .input-wrapper input, .input-wrapper select, .input-wrapper textarea { border: none; background: transparent; width: 100%; font-size: 14px; outline: none; font-family: 'Inter', sans-serif; }
+        .row-group { display: flex; gap: 10px; }
+        .row-group .form-group { flex: 1; }
+        .payment-info { background-color: #f9f9f9; border: 1px dashed #6d8c6b; border-radius: 12px; padding: 15px; margin: 20px 0 15px; font-size: 13px; text-align: center; }
+        .btn-submit { background-color: #6d8c6b; color: white; border: none; width: 100%; padding: 15px; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background-color: #5a7558; }
+        #loader { display: none; text-align: center; font-size: 14px; color: #6d8c6b; margin-top: 10px; font-weight:bold; }
+
+        .invoice-page { display: none; width: 100%; max-width: 800px; background-color: white; min-height: 100vh; padding: 40px; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.1); margin: 0 auto;}
+        .success-msg { text-align: center; color: #6d8c6b; font-weight: 600; font-size: 18px; margin-bottom: 30px; padding: 15px; background-color: #e6e9e4; border-radius: 10px; }
+        #invoiceContent { background: white; padding: 20px; }
+        .inv-header { text-align: center; margin-bottom: 40px; position: relative; }
+        .inv-header .box { background-color: #dbd5cd; height: 30px; width: 60%; margin: 0 auto; position: absolute; top: 10px; left: 20%; z-index: 1; }
+        .inv-logo-text { position: relative; z-index: 2; }
+        .inv-logo-text .pixme { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 32px; color: #8c7e71; letter-spacing: 1px; }
+        .inv-logo-text .photo { font-family: 'Great Vibes', cursive; font-size: 28px; color: #a39587; margin-top: -15px; display: block; }
+        .inv-title { font-family: 'Playfair Display', serif; font-size: 36px; color: #a39587; margin-bottom: 5px; }
+        .inv-details { font-size: 12px; color: #888; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 30px; line-height: 1.6; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .inv-table th { background-color: #dbd5cd; color: #8c7e71; font-family: 'Great Vibes', cursive; font-size: 22px; font-weight: normal; padding: 10px; text-align: left; }
+        .inv-table th:last-child { text-align: right; }
+        .inv-table td { padding: 15px 10px; font-size: 12px; color: #888; text-transform: uppercase; border-bottom: 1px solid #dbd5cd; }
+        .inv-table td:last-child { text-align: right; }
+        .inv-summary { width: 100%; margin-top: 10px; font-size: 12px; color: #888; text-transform: uppercase; }
+        .inv-summary .row { display: flex; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid #dbd5cd; }
+        .inv-summary .row .label { flex: 1; text-align: right; padding-right: 20px; }
+        .inv-summary .row .value { width: 120px; text-align: right; }
+        .inv-payment { margin-top: 40px; font-size: 12px; color: #888; text-transform: uppercase; line-height: 1.6; }
+        .inv-footer { text-align: center; margin-top: 50px; font-size: 12px; color: #888; }
+        .btn-download { background-color: #a39587; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; margin-top: 20px; display: block; width: 100%; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="formContainer">
+    <div class="form-section">
+        <div class="header-logo">
+            <h1>PIXME PHOTOBOOTH</h1>
+            <p>-Order Form-</p>
+        </div>
+        <form id="orderForm" onsubmit="processOrder(event)">
+            <div class="form-group"><div class="input-wrapper"><input type="text" id="custName" placeholder="Name" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><input type="tel" id="custPhone" placeholder="Phone Number" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><input type="text" id="custIg" placeholder="Instagram" required></div></div>
+            <div class="row-group">
+                <div class="form-group"><label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Event Date</label><div class="input-wrapper"><input type="date" id="eventDate" required></div></div>
+                <div class="form-group"><label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Event Time</label><div class="input-wrapper"><input type="time" id="eventTime" required></div></div>
+            </div>
+            <div class="form-group"><div class="input-wrapper"><input type="text" id="eventName" placeholder="Event Name" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><input type="text" id="eventLocation" placeholder="Event Location" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><select id="eventVenue" required><option value="" disabled selected>Indoor / Outdoor</option><option value="Indoor">Indoor</option><option value="Outdoor">Outdoor</option></select></div></div>
+            <div class="form-group"><div class="input-wrapper"><input type="text" id="packageName" placeholder="Package Name (Ketik nama paket)" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><input type="number" id="packagePrice" placeholder="Harga Paket (contoh: 2000000)" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><input type="text" id="designTemplate" placeholder="Type Design Template" required></div></div>
+            <div class="form-group"><div class="input-wrapper"><textarea id="note" placeholder="Note / Request Tambahan"></textarea></div></div>
+            <div class="payment-info"><strong>Informasi Pembayaran</strong><br>BCA: 7725351551<br>A.n I NYOMAN TRI AGAM W.</div>
+            <div class="form-group"><div class="input-wrapper"><input type="number" id="paymentAmount" placeholder="Nominal Transfer (contoh: 500000)" required></div></div>
+            <div class="form-group"><label style="display:block; font-size:12px; margin-bottom:5px; color:#555;">Proof of Payment (Bukti Transfer)</label><div class="input-wrapper"><input type="file" id="proofPayment" accept="image/*" required></div></div>
+            
+            <button type="submit" class="btn-submit" id="btnSubmit">Send Order</button>
+            <div id="loader">Menyimpan data... Mohon tunggu jangan tutup halaman.</div>
+        </form>
+    </div>
+</div>
+
+<div class="invoice-page" id="invoicePage">
+    <div class="success-msg">Yeay! Terima kasih sudah pesan.</div>
+    <button class="btn-download" onclick="downloadPDF()">⬇ Download Invoice PDF</button>
+    <div id="invoiceContent">
+        <div class="inv-header"><div class="box"></div><div class="inv-logo-text"><span class="pixme">Pixme</span><span class="photo">Photobooth</span></div></div>
+        <div class="inv-title">Invoice</div>
+        <div class="inv-details">INVOICE : <span id="invNameDisplay">NAMA_KLIEN</span><br>DATE : <span id="invDateDisplay">DD/MM/YY</span></div>
+        <table class="inv-table">
+            <thead><tr><th>Deskripsi</th><th style="text-align: center;">Quantity</th><th>Total</th></tr></thead>
+            <tbody><tr><td id="invPackageDisplay">NAMA PAKET</td><td style="text-align: center;">1</td><td id="invPriceDisplay">0</td></tr></tbody>
+        </table>
+        <div class="inv-summary">
+            <div class="row"><div class="label">TOTAL :</div><div class="value" id="invTotalDisplay">0</div></div>
+            <div class="row"><div class="label" id="invPaymentLabel">DP :</div><div class="value" id="invPaidDisplay">0</div></div>
+            <div class="row"><div class="label">SISA :</div><div class="value" id="invSisaDisplay">0</div></div>
+        </div>
+        <div class="inv-payment">PEMBAYARAN :<br>Nama : I NYOMAN TRI AGAM W.<br>BCA : 7725351551</div>
+        <div class="inv-footer">Terima kasih atas kepercayaan anda.<div class="inv-logo-text" style="font-size: 0.7em; margin-top:20px;"><span class="pixme">Pixme</span><span class="photo" style="display:inline; margin-left:-5px;">Photobooth</span></div></div>
+    </div>
+</div>
+
+<script>
+    // =========================================================================
+    // PASTIKAN LINK WEB APP GOOGLE ANDA DITEMPEL PADA BARIS DI BAWAH INI SAJA
+    // =========================================================================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4-NvxqgcQJFcNvztBPSr56cAiSFhGInQHeuQpNwFRENUZSBSG6omB8d3tR0rzvgdX/exec'; 
+
+    function formatRupiah(angka) { return new Intl.NumberFormat('id-ID').format(angka).replace(/,/g, '.'); }
+
+    function processOrder(event) {
+        event.preventDefault(); 
+        const btnSubmit = document.getElementById('btnSubmit');
+        const loader = document.getElementById('loader');
+        btnSubmit.style.display = 'none'; loader.style.display = 'block';
+
+        const fileInput = document.getElementById('proofPayment');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) { sendDataToServer(e.target.result, file.name); };
+            reader.readAsDataURL(file);
+        } else {
+            sendDataToServer("", ""); 
+        }
+    }
+
+    function sendDataToServer(fileData, fileName) {
+        const formData = {
+            name: document.getElementById('custName').value.toUpperCase(),
+            phone: document.getElementById('custPhone').value,
+            instagram: document.getElementById('custIg').value,
+            eventDate: document.getElementById('eventDate').value,
+            eventTime: document.getElementById('eventTime').value,
+            eventName: document.getElementById('eventName').value,
+            eventLocation: document.getElementById('eventLocation').value,
+            venue: document.getElementById('eventVenue').value,
+            packageName: document.getElementById('packageName').value.toUpperCase(),
+            packagePrice: document.getElementById('packagePrice').value,
+            designTemplate: document.getElementById('designTemplate').value,
+            note: document.getElementById('note').value,
+            paymentAmount: document.getElementById('paymentAmount').value,
+            fileData: fileData, fileName: fileName  
+        };
+
+        // Bagian blok 'if' yang bikin error sudah saya hapus di sini
+
+        fetch(SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
+        }).then(() => {
+            setupInvoiceAndSwitchPage(formData);
+        }).catch((e) => {
+            alert('Terjadi kesalahan koneksi internet. Pastikan sinyal stabil.');
+            document.getElementById('btnSubmit').style.display = 'block'; document.getElementById('loader').style.display = 'none';
+        });
+    }
+
+    function setupInvoiceAndSwitchPage(data) {
+        let formattedDate = "00/00/00";
+        if(data.eventDate) {
+            const d = new Date(data.eventDate);
+            formattedDate = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
+        }
+
+        let priceNum = parseInt(data.packagePrice) || 0;
+        let paidNum = parseInt(data.paymentAmount) || 0;
+        let sisaNum = priceNum - paidNum;
+
+        document.getElementById('invNameDisplay').innerText = data.name;
+        document.getElementById('invDateDisplay').innerText = formattedDate;
+        document.getElementById('invPackageDisplay').innerText = data.packageName;
+        document.getElementById('invPriceDisplay').innerText = formatRupiah(priceNum);
+        document.getElementById('invTotalDisplay').innerText = formatRupiah(priceNum);
+        document.getElementById('invPaidDisplay').innerText = formatRupiah(paidNum);
+
+        if (sisaNum <= 0) {
+            document.getElementById('invPaymentLabel').innerText = "DIBAYAR :";
+            document.getElementById('invSisaDisplay').innerText = "LUNAS";
+        } else {
+            document.getElementById('invPaymentLabel').innerText = "DP :";
+            document.getElementById('invSisaDisplay').innerText = formatRupiah(sisaNum);
+        }
+
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('invoicePage').style.display = 'block';
+        document.body.style.backgroundColor = '#d5dbd3';
+        window.scrollTo(0, 0);
+    }
+
+    function downloadPDF() {
+        const element = document.getElementById('invoiceContent');
+        html2pdf().set({ margin: 0.5, filename: 'Invoice_Pixme_' + document.getElementById('invNameDisplay').innerText + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }).from(element).save();
+    }
+</script>
+</body>
+</html>
