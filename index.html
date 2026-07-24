@@ -5,70 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order - Pixme Photobooth</title>
     
-    <!-- Library untuk Invoice PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
 
         /* =========================================================
-           FORM PAGE STYLES (Light Neumorphism - Tetap Sama)
+           GLOBAL & FORM STYLE (NEUMORPHISM & GLASSMORPHISM)
         ========================================================= */
         body { 
             margin: 0; padding: 0; font-family: 'Inter', sans-serif; 
             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
             background-color: #e5e9f0;
-            background-image: radial-gradient(circle at 80% 0%, rgba(99, 132, 255, 0.6) 0%, transparent 40%), radial-gradient(circle at 0% 40%, rgba(99, 132, 255, 0.4) 0%, transparent 50%);
+            background-image: radial-gradient(circle at 80% 0%, rgba(99, 132, 255, 0.5) 0%, transparent 40%), radial-gradient(circle at 0% 40%, rgba(99, 132, 255, 0.3) 0%, transparent 50%);
             background-attachment: fixed; color: #333; transition: background 0.5s ease;
         }
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: radial-gradient(#a3b1c6 1px, transparent 1px); background-size: 80px 80px; opacity: 0.3; z-index: -1;
         }
-        .container { width: 100%; max-width: 450px; padding: 30px 20px; box-sizing: border-box; }
-        .hero-title { position: relative; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 38px; line-height: 0.9; letter-spacing: -1px; color: #1c1c1e; margin-bottom: 30px; margin-top: 10px; text-transform: uppercase; }
-        .hero-title .small-text { position: absolute; top: 25px; left: -10px; font-family: 'Inter', sans-serif; font-size: 8px; font-weight: 500; color: #555; transform: rotate(-90deg); }
-        .hero-title .highlight { color: #ff3b2f; }
-        .hero-title .line-2 { font-size: 32px; display: block; margin-top: 5px; }
 
-        .glass-card { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 35px; padding: 35px 25px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), inset 0 0 0 2px rgba(255,255,255,0.2); position: relative; overflow: hidden; }
-        .form-title { text-align: center; font-size: 18px; font-weight: 500; margin-bottom: 25px; }
+        .container { width: 100%; max-width: 450px; padding: 30px 20px; box-sizing: border-box; }
+
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 35px; padding: 35px 25px; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), inset 0 0 0 2px rgba(255,255,255,0.2); 
+        }
+
+        .header-logo { text-align: center; margin-bottom: 25px; }
+        .header-logo h1 { font-family: 'Playfair Display', serif; color: #4a4a4a; margin: 0; font-size: 28px; }
+        .header-logo p { color: #6d8c6b; margin: 5px 0 0 0; font-size: 14px; }
+
         .form-group { margin-bottom: 18px; }
         .row-group { display: flex; gap: 15px; }
         .row-group .form-group { flex: 1; }
-        .neo-input { width: 100%; box-sizing: border-box; background: rgba(235, 238, 245, 0.6); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 14px 18px; font-family: 'Inter', sans-serif; font-size: 13px; color: #333; outline: none; box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.3), inset -3px -3px 6px rgba(255, 255, 255, 0.8); transition: all 0.2s ease; }
+
+        /* Style Kolom Input (Neumorphism Pill Shape) */
+        .neo-input { 
+            width: 100%; box-sizing: border-box; background: rgba(235, 238, 245, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 14px 18px; 
+            font-family: 'Inter', sans-serif; font-size: 13px; color: #333; outline: none; 
+            box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.3), inset -3px -3px 6px rgba(255, 255, 255, 0.8); 
+            transition: all 0.2s ease; 
+        }
         .neo-input:focus { box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.4), inset -4px -4px 8px rgba(255, 255, 255, 0.9); background: rgba(235, 238, 245, 0.8); }
         .neo-input::placeholder { color: #8a93a6; font-weight: 400; }
         textarea.neo-input { resize: vertical; min-height: 60px; border-radius: 15px; }
         select.neo-input { appearance: none; color: #8a93a6; }
         select.neo-input:valid { color: #333; }
+
+        /* Custom File Upload */
         .file-upload-wrapper { position: relative; width: 100%; }
         .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-        .file-upload-btn { display: block; width: 100%; box-sizing: border-box; background: rgba(235, 238, 245, 0.6); border: 1px dashed rgba(163, 177, 198, 0.6); border-radius: 20px; padding: 14px 18px; text-align: center; font-size: 13px; color: #8a93a6; pointer-events: none; }
-        .payment-info { font-size: 11px; text-align: center; color: #666; margin: 20px 0; line-height: 1.5; padding: 10px; border-radius: 15px; background: rgba(255,255,255,0.3); box-shadow: 2px 2px 5px rgba(0,0,0,0.02); }
-        .neo-button { width: 100%; background: rgba(245, 247, 250, 0.8); border: 1px solid rgba(255, 255, 255, 1); border-radius: 25px; padding: 16px; margin-top: 10px; font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: #ff3b2f; cursor: pointer; box-shadow: 4px 4px 10px rgba(163, 177, 198, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.8); transition: all 0.2s ease; }
+        .file-upload-btn { display: block; width: 100%; box-sizing: border-box; background: rgba(235, 238, 245, 0.6); border: 1px dashed rgba(163, 177, 198, 0.6); border-radius: 20px; padding: 14px 18px; text-align: left; font-size: 13px; color: #8a93a6; pointer-events: none; }
+
+        .payment-info { font-size: 13px; text-align: center; color: #666; margin: 20px 0; line-height: 1.5; padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.4); border: 1px dashed #a3b1c6;}
+        
+        /* Tombol Neumorphism */
+        .neo-button { 
+            width: 100%; background: rgba(245, 247, 250, 0.8); border: 1px solid rgba(255, 255, 255, 1); 
+            border-radius: 25px; padding: 16px; margin-top: 10px; font-family: 'Inter', sans-serif; 
+            font-size: 16px; font-weight: 600; color: #ff3b2f; cursor: pointer; 
+            box-shadow: 4px 4px 10px rgba(163, 177, 198, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.8); 
+            transition: all 0.2s ease; 
+        }
         .neo-button:active { box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.3), inset -3px -3px 6px rgba(255, 255, 255, 0.8); color: #d32f24; }
-        #loader { display: none; text-align: center; font-size: 12px; color: #ff3b2f; margin-top: 15px; font-weight:500; }
+        #loader { display: none; text-align: center; font-size: 13px; color: #ff3b2f; margin-top: 15px; font-weight:500; }
 
         /* =========================================================
-           DARK PREMIUM INVOICE PAGE (NEW DESIGN)
+           INVOICE PAGE (DARK GLASSMORPHISM EFFECT)
         ========================================================= */
-        .invoice-page { 
-            display: none; width: 100%; min-height: 100vh; 
-            padding: 20px; box-sizing: border-box; margin: 0 auto;
-        }
+        .invoice-page { display: none; width: 100%; min-height: 100vh; padding: 20px; box-sizing: border-box; margin: 0 auto; }
         
-        .success-msg { text-align: center; color: #fff; font-weight: 500; font-size: 14px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); max-width: 800px; margin: 0 auto 20px auto; letter-spacing: 1px;}
+        .success-msg { text-align: center; color: #fff; font-weight: 600; font-size: 16px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); max-width: 800px; margin: 0 auto 20px auto; }
         
         #invoiceContent { 
             position: relative; max-width: 800px; margin: 0 auto; 
-            /* Gradient Mewah */
             background: linear-gradient(135deg, #7b9495 0%, #3a4a4c 40%, #0d1112 100%); 
             border-radius: 24px; padding: 40px; color: #fff; overflow: hidden; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
         }
         
-        /* Efek Noise (Bintik TV) pada background invoice */
         #invoiceContent::before {
             content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -76,42 +94,36 @@
         }
 
         .inv-header { text-align: center; margin-bottom: 40px; position: relative; z-index: 2; }
-        .inv-logo-text .pixme { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 38px; color: #fff; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 5px 15px rgba(0,0,0,0.3);}
-        .inv-logo-text .photo { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 14px; color: rgba(255,255,255,0.7); letter-spacing: 6px; display: block; margin-top: 5px; text-transform: uppercase;}
+        .inv-header .box { background-color: rgba(255,255,255,0.2); height: 30px; width: 60%; margin: 0 auto; position: absolute; top: 10px; left: 20%; z-index: 1; border-radius: 8px;}
+        .inv-logo-text { position: relative; z-index: 2; }
+        .inv-logo-text .pixme { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 32px; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);}
+        .inv-logo-text .photo { font-family: 'Great Vibes', cursive; font-size: 28px; color: rgba(255,255,255,0.8); margin-top: -15px; display: block; }
 
-        /* Kotak Glassmorphism Kaca Transparan */
         .inv-glass-panel {
-            background: rgba(255, 255, 255, 0.03); /* Sangat tipis */
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-top: 1px solid rgba(255, 255, 255, 0.4); /* Highlight atas */
-            border-left: 1px solid rgba(255, 255, 255, 0.4); /* Highlight kiri */
-            border-radius: 20px; padding: 35px 30px; position: relative; z-index: 2;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-top: 1px solid rgba(255, 255, 255, 0.4); border-left: 1px solid rgba(255, 255, 255, 0.4); 
+            border-radius: 20px; padding: 35px 30px; position: relative; z-index: 2; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
 
-        .inv-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 42px; color: #fff; margin-bottom: 5px; text-transform: uppercase; }
-        .inv-details { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 40px; line-height: 2; }
+        .inv-title { font-family: 'Playfair Display', serif; font-size: 36px; color: rgba(255,255,255,0.9); margin-bottom: 5px; }
+        .inv-details { font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 30px; line-height: 1.6; }
 
-        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-family: 'Inter', sans-serif; }
-        .inv-table th { background: rgba(255,255,255,0.06); color: #fff; font-size: 11px; font-weight: 600; padding: 15px; text-align: left; letter-spacing: 1px; text-transform: uppercase; border-radius: 8px 0 0 8px; }
-        .inv-table th:last-child { text-align: right; border-radius: 0 8px 8px 0; }
-        .inv-table td { padding: 20px 15px; font-size: 13px; color: rgba(255,255,255,0.9); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .inv-table td:last-child { text-align: right; font-weight: 500;}
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .inv-table th { background-color: rgba(255,255,255,0.1); color: #fff; font-family: 'Great Vibes', cursive; font-size: 22px; font-weight: normal; padding: 10px; text-align: left; }
+        .inv-table th:last-child { text-align: right; }
+        .inv-table td { padding: 15px 10px; font-size: 12px; color: rgba(255,255,255,0.85); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .inv-table td:last-child { text-align: right; }
 
-        .inv-summary { width: 100%; margin-top: 20px; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 400; letter-spacing: 1px;}
-        .inv-summary .row { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .inv-summary { width: 100%; margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.85); text-transform: uppercase; }
+        .inv-summary .row { display: flex; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .inv-summary .row .label { flex: 1; text-align: right; padding-right: 20px; }
-        .inv-summary .row .value { width: 120px; text-align: right; font-weight: 600; color: #fff;}
-        .inv-summary .row.highlight-row { color: #fff; background: rgba(255,255,255,0.05); border-radius: 8px; border:none; margin-top: 5px;}
+        .inv-summary .row .value { width: 120px; text-align: right; }
 
-        .inv-payment { margin-top: 40px; font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; line-height: 1.8; letter-spacing: 1px; }
+        .inv-payment { margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; line-height: 1.6; }
         
-        .inv-footer { text-align: center; margin-top: 50px; position: relative; z-index: 2; }
-        .inv-footer .tagline { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 4px; word-spacing: 10px; text-transform: lowercase; margin-bottom: 20px;}
-        .inv-footer .copyright { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+        .inv-footer { text-align: center; margin-top: 50px; font-size: 12px; color: rgba(255,255,255,0.7); position: relative; z-index: 2;}
 
-        .btn-download { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 15px 20px; border-radius: 20px; font-size: 12px; cursor: pointer; display: block; width: 100%; max-width: 800px; margin: 0 auto 20px auto; text-align: center; transition: all 0.3s; text-transform: uppercase; font-weight: 600; letter-spacing: 2px;}
+        .btn-download { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; cursor: pointer; display: block; width: 100%; max-width: 800px; margin: 0 auto 20px auto; text-align: center; transition: all 0.3s; }
         .btn-download:hover { background: rgba(255, 255, 255, 0.2); }
     </style>
 </head>
@@ -119,103 +131,118 @@
 
 <!-- ================= FORM SECTION ================= -->
 <div class="container" id="formContainer">
-    <div class="hero-title">
-        <span class="small-text">Register panel.<br>03.02.2026©</span>
-        WELCOME<br>
-        <span class="line-2">TO <span class="highlight">pixme</span> FAMILY</span>
-    </div>
-
     <div class="glass-card">
-        <div class="form-title">Create an order!</div>
+        
+        <!-- TEKS 100% ORIGINAL DIKEMBALIKAN -->
+        <div class="header-logo">
+            <h1>PIXME PHOTOBOOTH</h1>
+            <p>-Order Form-</p>
+        </div>
+
         <form id="orderForm" onsubmit="processOrder(event)">
+            <div class="form-group"><input type="text" id="custName" class="neo-input" placeholder="Name" required></div>
+            <div class="form-group"><input type="tel" id="custPhone" class="neo-input" placeholder="Phone Number" required></div>
+            <div class="form-group"><input type="text" id="custIg" class="neo-input" placeholder="Instagram" required></div>
+            
             <div class="row-group">
-                <div class="form-group"><input type="text" id="custName" class="neo-input" placeholder="first name" required></div>
-                <div class="form-group"><input type="tel" id="custPhone" class="neo-input" placeholder="phone number" required></div>
+                <div class="form-group">
+                    <label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Event Date</label>
+                    <input type="date" id="eventDate" class="neo-input" required>
+                </div>
+                <div class="form-group">
+                    <label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Event Time</label>
+                    <input type="time" id="eventTime" class="neo-input" required>
+                </div>
             </div>
-            <div class="form-group"><input type="text" id="custIg" class="neo-input" placeholder="@ instagram" required></div>
-            <div class="row-group">
-                <div class="form-group"><input type="date" id="eventDate" class="neo-input" title="event date" required></div>
-                <div class="form-group"><input type="time" id="eventTime" class="neo-input" title="event time" required></div>
-            </div>
-            <div class="form-group"><input type="text" id="eventName" class="neo-input" placeholder="event name" required></div>
-            <div class="form-group"><input type="text" id="eventLocation" class="neo-input" placeholder="event location" required></div>
+
+            <div class="form-group"><input type="text" id="eventName" class="neo-input" placeholder="Event Name" required></div>
+            <div class="form-group"><input type="text" id="eventLocation" class="neo-input" placeholder="Event Location" required></div>
+            
             <div class="form-group">
                 <select id="eventVenue" class="neo-input" required>
-                    <option value="" disabled selected>indoor / outdoor</option>
-                    <option value="Indoor">indoor</option>
-                    <option value="Outdoor">outdoor</option>
+                    <option value="" disabled selected>Indoor / Outdoor</option>
+                    <option value="Indoor">Indoor</option>
+                    <option value="Outdoor">Outdoor</option>
                 </select>
             </div>
-            <div class="form-group"><input type="text" id="packageName" class="neo-input" placeholder="package name" required></div>
-            <div class="form-group"><input type="number" id="packagePrice" class="neo-input" placeholder="package price (e.g. 2000000)" required></div>
-            <div class="form-group"><input type="text" id="designTemplate" class="neo-input" placeholder="design template" required></div>
-            <div class="form-group"><textarea id="note" class="neo-input" placeholder="notes / additional request"></textarea></div>
-            <div class="payment-info"><strong>Bank Transfer:</strong><br>BCA: 7725351551<br>A.n I NYOMAN TRI AGAM W.</div>
-            <div class="form-group"><input type="number" id="paymentAmount" class="neo-input" placeholder="transfer amount (e.g. 500000)" required></div>
+            
+            <div class="form-group"><input type="text" id="packageName" class="neo-input" placeholder="Package Name (Ketik nama paket)" required></div>
+            <div class="form-group"><input type="number" id="packagePrice" class="neo-input" placeholder="Harga Paket (contoh: 2000000)" required></div>
+            <div class="form-group"><input type="text" id="designTemplate" class="neo-input" placeholder="Type Design Template" required></div>
+            <div class="form-group"><textarea id="note" class="neo-input" placeholder="Note / Request Tambahan"></textarea></div>
+            
+            <div class="payment-info"><strong>Informasi Pembayaran</strong><br>BCA: 7725351551<br>A.n I NYOMAN TRI AGAM W.</div>
+            
+            <div class="form-group"><input type="number" id="paymentAmount" class="neo-input" placeholder="Nominal Transfer (contoh: 500000)" required></div>
+            
             <div class="form-group">
+                <label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Proof of Payment (Bukti Transfer)</label>
                 <div class="file-upload-wrapper">
-                    <span class="file-upload-btn" id="fileNameDisplay">upload proof of payment</span>
+                    <span class="file-upload-btn" id="fileNameDisplay">Pilih file...</span>
                     <input type="file" id="proofPayment" accept="image/*" required onchange="updateFileName(this)">
                 </div>
             </div>
+
             <button type="submit" class="neo-button" id="btnSubmit">Send Order</button>
-            <div id="loader">Processing your order... Please do not close the page.</div>
+            <div id="loader">Menyimpan data... Mohon tunggu jangan tutup halaman.</div>
         </form>
     </div>
 </div>
 
-<!-- ================= INVOICE PAGE (DARK GLASS) ================= -->
+<!-- ================= INVOICE PAGE (DARK GLASSMORPHISM) ================= -->
 <div class="invoice-page" id="invoicePage">
-    <div class="success-msg">YOUR ORDER HAS BEEN CREATED SUCCESSFULLY</div>
-    <button class="btn-download" onclick="downloadPDF()">Download Invoice PDF</button>
+    <div class="success-msg">Yeay! Terima kasih sudah pesan.</div>
+    <button class="btn-download" onclick="downloadPDF()">⬇ Download Invoice PDF</button>
     
     <div id="invoiceContent">
         <div class="inv-header">
-            <div class="inv-logo-text"><span class="pixme">PIXME</span><span class="photo">PHOTOBOOTH</span></div>
+            <div class="box"></div>
+            <div class="inv-logo-text"><span class="pixme">pixme</span><span class="photo">photobooth</span></div>
         </div>
         
         <!-- Panel Kaca di Dalam Invoice -->
         <div class="inv-glass-panel">
             <div class="inv-title">Invoice</div>
-            <div class="inv-details">INV : <span id="invNameDisplay">NAMA_KLIEN</span><br>DATE : <span id="invDateDisplay">DD/MM/YY</span></div>
+            <div class="inv-details">INVOICE : <span id="invNameDisplay">NAMA_KLIEN</span><br>DATE : <span id="invDateDisplay">DD/MM/YY</span></div>
             
             <table class="inv-table">
-                <thead><tr><th>Deskripsi</th><th style="text-align: center;">Qty</th><th>Total</th></tr></thead>
+                <thead><tr><th>Deskripsi</th><th style="text-align: center;">Quantity</th><th>Total</th></tr></thead>
                 <tbody><tr><td id="invPackageDisplay">NAMA PAKET</td><td style="text-align: center;">1</td><td id="invPriceDisplay">0</td></tr></tbody>
             </table>
             
             <div class="inv-summary">
-                <div class="row"><div class="label">TOTAL</div><div class="value" id="invTotalDisplay">0</div></div>
-                <div class="row"><div class="label" id="invPaymentLabel">DP</div><div class="value" id="invPaidDisplay">0</div></div>
-                <div class="row highlight-row"><div class="label">SISA</div><div class="value" id="invSisaDisplay">0</div></div>
+                <div class="row"><div class="label">TOTAL :</div><div class="value" id="invTotalDisplay">0</div></div>
+                <div class="row"><div class="label" id="invPaymentLabel">DP :</div><div class="value" id="invPaidDisplay">0</div></div>
+                <div class="row"><div class="label">SISA :</div><div class="value" id="invSisaDisplay">0</div></div>
             </div>
             
-            <div class="inv-payment">PEMBAYARAN KE:<br>I NYOMAN TRI AGAM W.<br>BCA — 7725351551</div>
+            <div class="inv-payment">PEMBAYARAN :<br>Nama : I NYOMAN TRI AGAM W.<br>BCA : 7725351551</div>
         </div>
 
         <div class="inv-footer">
-            <!-- Kata-kata yang diambil dari gambar referensi Anda -->
-            <div class="tagline">where design starts to feel premium</div>
-            <div class="copyright">© 2026 PIXME PHOTOBOOTH</div>
+            Terima kasih atas kepercayaan anda.
+            <div class="inv-logo-text" style="font-size: 0.7em; margin-top:20px;">
+                <span class="pixme">pixme</span><span class="photo" style="display:inline; margin-left:-5px;">photobooth</span>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Link Apps Script Anda
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4-NvxqgcQJFcNvztBPSr56cAiSFhGiNQheuQpNwFRENUZSBSG6omB8d3tR0rzvgdX/exec';
 
     function formatRupiah(angka) { return new Intl.NumberFormat('id-ID').format(angka).replace(/,/g, '.'); }
 
+    // Memperbarui tulisan tombol file saat gambar dipilih
     function updateFileName(input) {
         const display = document.getElementById('fileNameDisplay');
         if (input.files && input.files[0]) {
             display.innerText = "✓ " + input.files[0].name;
             display.style.color = "#ff3b2f";
-            display.style.borderColor = "#ff3b2f";
         } else {
-            display.innerText = "upload proof of payment";
+            display.innerText = "Pilih file...";
             display.style.color = "#8a93a6";
-            display.style.borderColor = "rgba(163, 177, 198, 0.6)";
         }
     }
 
@@ -284,17 +311,17 @@
         document.getElementById('invPaidDisplay').innerText = formatRupiah(paidNum);
 
         if (sisaNum <= 0) {
-            document.getElementById('invPaymentLabel').innerText = "DIBAYAR";
+            document.getElementById('invPaymentLabel').innerText = "DIBAYAR :";
             document.getElementById('invSisaDisplay').innerText = "LUNAS";
         } else {
-            document.getElementById('invPaymentLabel').innerText = "DP";
+            document.getElementById('invPaymentLabel').innerText = "DP :";
             document.getElementById('invSisaDisplay').innerText = formatRupiah(sisaNum);
         }
 
         document.getElementById('formContainer').style.display = 'none';
         document.getElementById('invoicePage').style.display = 'block';
         
-        // Ubah latar belakang body agar gelap menyatu dengan invoice saat pindah halaman
+        // Ubah warna latar belakang body saat pindah ke halaman invoice (Dark mode)
         document.body.style.backgroundImage = 'none';
         document.body.style.backgroundColor = '#0d1112';
         window.scrollTo(0, 0);
@@ -302,12 +329,11 @@
 
     function downloadPDF() {
         const element = document.getElementById('invoiceContent');
-        // Kualitas diturunkan sedikit agar file PDF tidak terlalu berat karena background gelap
         html2pdf().set({ 
-            margin: 0.1, 
+            margin: 0.2, 
             filename: 'Invoice_Pixme_' + document.getElementById('invNameDisplay').innerText + '.pdf', 
-            image: { type: 'jpeg', quality: 0.95 }, 
-            html2canvas: { scale: 2, useCORS: true }, 
+            image: { type: 'jpeg', quality: 0.98 }, 
+            html2canvas: { scale: 2 }, 
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
         }).from(element).save();
     }
