@@ -11,120 +11,133 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap');
 
         /* =========================================================
-           GLOBAL & FORM STYLE (NEUMORPHISM & GLASSMORPHISM)
+           GLOBAL STYLES (DARK PREMIUM MODE)
         ========================================================= */
+        /* Kode ini yang paling penting agar tidak berantakan di HP */
+        *, *::before, *::after { box-sizing: border-box; } 
+
         body { 
             margin: 0; padding: 0; font-family: 'Inter', sans-serif; 
             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
-            background-color: #e5e9f0;
-            background-image: radial-gradient(circle at 80% 0%, rgba(99, 132, 255, 0.5) 0%, transparent 40%), radial-gradient(circle at 0% 40%, rgba(99, 132, 255, 0.3) 0%, transparent 50%);
-            background-attachment: fixed; color: #333; transition: background 0.5s ease;
+            /* Latar Belakang Gelap Global */
+            background: linear-gradient(135deg, #7b9495 0%, #3a4a4c 40%, #0d1112 100%);
+            background-attachment: fixed; color: #fff; 
         }
+        
+        /* Efek Bintik Noise (Kaca Mewah) */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(#a3b1c6 1px, transparent 1px); background-size: 80px 80px; opacity: 0.3; z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.12; pointer-events: none; mix-blend-mode: overlay; z-index: -1;
         }
 
-        .container { width: 100%; max-width: 450px; padding: 30px 20px; box-sizing: border-box; }
+        .container { width: 100%; max-width: 450px; padding: 20px 15px; margin: 0 auto; }
 
+        /* =========================================================
+           FORM PAGE (DARK GLASSMORPHISM)
+        ========================================================= */
         .glass-card { 
-            background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 35px; padding: 35px 25px; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), inset 0 0 0 2px rgba(255,255,255,0.2); 
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-top: 1px solid rgba(255, 255, 255, 0.4); border-left: 1px solid rgba(255, 255, 255, 0.4); 
+            border-radius: 20px; padding: 35px 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
-        .header-logo { text-align: center; margin-bottom: 25px; }
-        .header-logo h1 { font-family: 'Playfair Display', serif; color: #4a4a4a; margin: 0; font-size: 28px; }
-        .header-logo p { color: #6d8c6b; margin: 5px 0 0 0; font-size: 14px; }
+        .header-logo { text-align: center; margin-bottom: 30px; }
+        .header-logo h1 { font-family: 'Playfair Display', serif; color: #fff; margin: 0; font-size: 26px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); letter-spacing: 1px;}
+        .header-logo p { color: rgba(255,255,255,0.7); margin: 5px 0 0 0; font-size: 13px; font-weight: 300;}
 
-        .form-group { margin-bottom: 18px; }
-        .row-group { display: flex; gap: 15px; }
-        .row-group .form-group { flex: 1; }
+        .form-group { margin-bottom: 15px; width: 100%; }
+        .row-group { display: flex; gap: 10px; width: 100%; }
+        
+        /* Label Teks Form */
+        .form-label { display: block; font-size: 11px; margin-bottom: 5px; color: rgba(255,255,255,0.7); padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
 
-        /* Style Kolom Input (Neumorphism Pill Shape) */
+        /* Input Form Transparan Gelap */
         .neo-input { 
-            width: 100%; box-sizing: border-box; background: rgba(235, 238, 245, 0.6); 
-            border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 14px 18px; 
-            font-family: 'Inter', sans-serif; font-size: 13px; color: #333; outline: none; 
-            box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.3), inset -3px -3px 6px rgba(255, 255, 255, 0.8); 
-            transition: all 0.2s ease; 
+            width: 100%; background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 12px 15px; 
+            font-family: 'Inter', sans-serif; font-size: 13px; color: #fff; outline: none; 
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; 
         }
-        .neo-input:focus { box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.4), inset -4px -4px 8px rgba(255, 255, 255, 0.9); background: rgba(235, 238, 245, 0.8); }
-        .neo-input::placeholder { color: #8a93a6; font-weight: 400; }
-        textarea.neo-input { resize: vertical; min-height: 60px; border-radius: 15px; }
-        select.neo-input { appearance: none; color: #8a93a6; }
-        select.neo-input:valid { color: #333; }
+        .neo-input:focus { border-color: rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.4); }
+        .neo-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 300; }
+        textarea.neo-input { resize: vertical; min-height: 60px; }
+        
+        /* Khusus Dropdown di HP agar terlihat */
+        select.neo-input option { background: #3a4a4c; color: #fff; }
 
         /* Custom File Upload */
         .file-upload-wrapper { position: relative; width: 100%; }
         .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-        .file-upload-btn { display: block; width: 100%; box-sizing: border-box; background: rgba(235, 238, 245, 0.6); border: 1px dashed rgba(163, 177, 198, 0.6); border-radius: 20px; padding: 14px 18px; text-align: left; font-size: 13px; color: #8a93a6; pointer-events: none; }
+        .file-upload-btn { display: block; width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px dashed rgba(255, 255, 255, 0.3); border-radius: 12px; padding: 12px 15px; text-align: left; font-size: 13px; color: rgba(255,255,255,0.4); pointer-events: none; }
 
-        .payment-info { font-size: 13px; text-align: center; color: #666; margin: 20px 0; line-height: 1.5; padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.4); border: 1px dashed #a3b1c6;}
+        .payment-info { font-size: 12px; text-align: center; color: rgba(255,255,255,0.8); margin: 20px 0; line-height: 1.6; padding: 15px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.2);}
         
-        /* Tombol Neumorphism */
+        /* Tombol Premium Kaca */
         .neo-button { 
-            width: 100%; background: rgba(245, 247, 250, 0.8); border: 1px solid rgba(255, 255, 255, 1); 
-            border-radius: 25px; padding: 16px; margin-top: 10px; font-family: 'Inter', sans-serif; 
-            font-size: 16px; font-weight: 600; color: #ff3b2f; cursor: pointer; 
-            box-shadow: 4px 4px 10px rgba(163, 177, 198, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.8); 
-            transition: all 0.2s ease; 
+            width: 100%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3); border-top: 1px solid rgba(255,255,255,0.5);
+            border-radius: 15px; padding: 15px; margin-top: 15px; font-family: 'Inter', sans-serif; 
+            font-size: 14px; font-weight: 600; color: #fff; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; 
         }
-        .neo-button:active { box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.3), inset -3px -3px 6px rgba(255, 255, 255, 0.8); color: #d32f24; }
-        #loader { display: none; text-align: center; font-size: 13px; color: #ff3b2f; margin-top: 15px; font-weight:500; }
+        .neo-button:active { background: rgba(255,255,255,0.05); transform: scale(0.98); }
+        #loader { display: none; text-align: center; font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 15px; font-weight: 400; }
 
         /* =========================================================
-           INVOICE PAGE (DARK GLASSMORPHISM EFFECT)
+           INVOICE PAGE (SAMA DENGAN DESAIN SEBELUMNYA)
         ========================================================= */
-        .invoice-page { display: none; width: 100%; min-height: 100vh; padding: 20px; box-sizing: border-box; margin: 0 auto; }
+        .invoice-page { display: none; width: 100%; min-height: 100vh; padding: 20px 15px; margin: 0 auto; }
         
-        .success-msg { text-align: center; color: #fff; font-weight: 600; font-size: 16px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); max-width: 800px; margin: 0 auto 20px auto; }
+        .success-msg { text-align: center; color: #fff; font-weight: 500; font-size: 14px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); max-width: 800px; margin: 0 auto 20px auto; }
         
+        /* Penting: Invoice diset backgroundnya spesifik untuk render ke PDF */
         #invoiceContent { 
             position: relative; max-width: 800px; margin: 0 auto; 
             background: linear-gradient(135deg, #7b9495 0%, #3a4a4c 40%, #0d1112 100%); 
-            border-radius: 24px; padding: 40px; color: #fff; overflow: hidden; 
+            border-radius: 24px; padding: 30px 20px; color: #fff; overflow: hidden; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
         }
         
-        #invoiceContent::before {
-            content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.15; pointer-events: none; mix-blend-mode: overlay; z-index: 1;
-        }
-
-        .inv-header { text-align: center; margin-bottom: 40px; position: relative; z-index: 2; }
-        .inv-header .box { background-color: rgba(255,255,255,0.2); height: 30px; width: 60%; margin: 0 auto; position: absolute; top: 10px; left: 20%; z-index: 1; border-radius: 8px;}
+        .inv-header { text-align: center; margin-bottom: 30px; position: relative; z-index: 2; }
+        .inv-header .box { background-color: rgba(255,255,255,0.2); height: 20px; width: 60%; margin: 0 auto; position: absolute; top: 10px; left: 20%; z-index: 1; border-radius: 8px;}
         .inv-logo-text { position: relative; z-index: 2; }
-        .inv-logo-text .pixme { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 32px; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);}
-        .inv-logo-text .photo { font-family: 'Great Vibes', cursive; font-size: 28px; color: rgba(255,255,255,0.8); margin-top: -15px; display: block; }
+        .inv-logo-text .pixme { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 28px; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);}
+        .inv-logo-text .photo { font-family: 'Great Vibes', cursive; font-size: 24px; color: rgba(255,255,255,0.8); margin-top: -12px; display: block; }
 
         .inv-glass-panel {
             background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.15); border-top: 1px solid rgba(255, 255, 255, 0.4); border-left: 1px solid rgba(255, 255, 255, 0.4); 
-            border-radius: 20px; padding: 35px 30px; position: relative; z-index: 2; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-radius: 15px; padding: 25px 20px; position: relative; z-index: 2; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
 
-        .inv-title { font-family: 'Playfair Display', serif; font-size: 36px; color: rgba(255,255,255,0.9); margin-bottom: 5px; }
-        .inv-details { font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 30px; line-height: 1.6; }
+        .inv-title { font-family: 'Playfair Display', serif; font-size: 28px; color: rgba(255,255,255,0.9); margin-bottom: 5px; }
+        .inv-details { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 25px; line-height: 1.6; }
 
-        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .inv-table th { background-color: rgba(255,255,255,0.1); color: #fff; font-family: 'Great Vibes', cursive; font-size: 22px; font-weight: normal; padding: 10px; text-align: left; }
+        /* Khusus Tabel Responsive di HP */
+        .inv-table-wrapper { width: 100%; overflow-x: auto; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; min-width: 250px; }
+        .inv-table th { background-color: rgba(255,255,255,0.1); color: #fff; font-family: 'Great Vibes', cursive; font-size: 18px; font-weight: normal; padding: 10px; text-align: left; white-space: nowrap; }
         .inv-table th:last-child { text-align: right; }
-        .inv-table td { padding: 15px 10px; font-size: 12px; color: rgba(255,255,255,0.85); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .inv-table td { padding: 15px 10px; font-size: 11px; color: rgba(255,255,255,0.85); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .inv-table td:last-child { text-align: right; }
 
-        .inv-summary { width: 100%; margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.85); text-transform: uppercase; }
-        .inv-summary .row { display: flex; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .inv-summary .row .label { flex: 1; text-align: right; padding-right: 20px; }
-        .inv-summary .row .value { width: 120px; text-align: right; }
+        .inv-summary { width: 100%; margin-top: 10px; font-size: 11px; color: rgba(255,255,255,0.85); text-transform: uppercase; }
+        .inv-summary .row { display: flex; justify-content: space-between; padding: 8px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .inv-summary .row .label { flex: 1; text-align: right; padding-right: 15px; }
+        .inv-summary .row .value { width: 90px; text-align: right; }
 
-        .inv-payment { margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; line-height: 1.6; }
+        .inv-payment { margin-top: 30px; font-size: 11px; color: rgba(255,255,255,0.7); text-transform: uppercase; line-height: 1.6; }
         
-        .inv-footer { text-align: center; margin-top: 50px; font-size: 12px; color: rgba(255,255,255,0.7); position: relative; z-index: 2;}
+        .inv-footer { text-align: center; margin-top: 40px; font-size: 11px; color: rgba(255,255,255,0.7); position: relative; z-index: 2;}
 
-        .btn-download { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 12px; font-size: 14px; cursor: pointer; display: block; width: 100%; max-width: 800px; margin: 0 auto 20px auto; text-align: center; transition: all 0.3s; }
-        .btn-download:hover { background: rgba(255, 255, 255, 0.2); }
+        .btn-download { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 12px; font-size: 12px; cursor: pointer; display: block; width: 100%; max-width: 800px; margin: 0 auto 20px auto; text-align: center; transition: all 0.3s; }
+        
+        /* Media Query untuk HP sangat kecil */
+        @media (max-width: 400px) {
+            .glass-card, .inv-glass-panel { padding: 25px 15px; }
+            .neo-input { font-size: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -133,7 +146,6 @@
 <div class="container" id="formContainer">
     <div class="glass-card">
         
-        <!-- TEKS 100% ORIGINAL DIKEMBALIKAN -->
         <div class="header-logo">
             <h1>PIXME PHOTOBOOTH</h1>
             <p>-Order Form-</p>
@@ -146,11 +158,11 @@
             
             <div class="row-group">
                 <div class="form-group">
-                    <label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Event Date</label>
+                    <label class="form-label">Event Date</label>
                     <input type="date" id="eventDate" class="neo-input" required>
                 </div>
                 <div class="form-group">
-                    <label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Event Time</label>
+                    <label class="form-label">Event Time</label>
                     <input type="time" id="eventTime" class="neo-input" required>
                 </div>
             </div>
@@ -176,7 +188,7 @@
             <div class="form-group"><input type="number" id="paymentAmount" class="neo-input" placeholder="Nominal Transfer (contoh: 500000)" required></div>
             
             <div class="form-group">
-                <label style="display:block; font-size:12px; margin-bottom:5px; color:#555; padding-left:5px;">Proof of Payment (Bukti Transfer)</label>
+                <label class="form-label">Proof of Payment (Bukti Transfer)</label>
                 <div class="file-upload-wrapper">
                     <span class="file-upload-btn" id="fileNameDisplay">Pilih file...</span>
                     <input type="file" id="proofPayment" accept="image/*" required onchange="updateFileName(this)">
@@ -189,7 +201,7 @@
     </div>
 </div>
 
-<!-- ================= INVOICE PAGE (DARK GLASSMORPHISM) ================= -->
+<!-- ================= INVOICE PAGE ================= -->
 <div class="invoice-page" id="invoicePage">
     <div class="success-msg">Yeay! Terima kasih sudah pesan.</div>
     <button class="btn-download" onclick="downloadPDF()">⬇ Download Invoice PDF</button>
@@ -200,15 +212,16 @@
             <div class="inv-logo-text"><span class="pixme">pixme</span><span class="photo">photobooth</span></div>
         </div>
         
-        <!-- Panel Kaca di Dalam Invoice -->
         <div class="inv-glass-panel">
             <div class="inv-title">Invoice</div>
             <div class="inv-details">INVOICE : <span id="invNameDisplay">NAMA_KLIEN</span><br>DATE : <span id="invDateDisplay">DD/MM/YY</span></div>
             
-            <table class="inv-table">
-                <thead><tr><th>Deskripsi</th><th style="text-align: center;">Quantity</th><th>Total</th></tr></thead>
-                <tbody><tr><td id="invPackageDisplay">NAMA PAKET</td><td style="text-align: center;">1</td><td id="invPriceDisplay">0</td></tr></tbody>
-            </table>
+            <div class="inv-table-wrapper">
+                <table class="inv-table">
+                    <thead><tr><th>Deskripsi</th><th style="text-align: center;">Qty</th><th>Total</th></tr></thead>
+                    <tbody><tr><td id="invPackageDisplay">NAMA PAKET</td><td style="text-align: center;">1</td><td id="invPriceDisplay">0</td></tr></tbody>
+                </table>
+            </div>
             
             <div class="inv-summary">
                 <div class="row"><div class="label">TOTAL :</div><div class="value" id="invTotalDisplay">0</div></div>
@@ -221,7 +234,7 @@
 
         <div class="inv-footer">
             Terima kasih atas kepercayaan anda.
-            <div class="inv-logo-text" style="font-size: 0.7em; margin-top:20px;">
+            <div class="inv-logo-text" style="font-size: 0.7em; margin-top:15px;">
                 <span class="pixme">pixme</span><span class="photo" style="display:inline; margin-left:-5px;">photobooth</span>
             </div>
         </div>
@@ -229,20 +242,21 @@
 </div>
 
 <script>
-    // Link Apps Script Anda
+    // Link Apps Script Anda 
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4-NvxqgcQJFcNvztBPSr56cAiSFhGiNQheuQpNwFRENUZSBSG6omB8d3tR0rzvgdX/exec';
 
     function formatRupiah(angka) { return new Intl.NumberFormat('id-ID').format(angka).replace(/,/g, '.'); }
 
-    // Memperbarui tulisan tombol file saat gambar dipilih
     function updateFileName(input) {
         const display = document.getElementById('fileNameDisplay');
         if (input.files && input.files[0]) {
             display.innerText = "✓ " + input.files[0].name;
-            display.style.color = "#ff3b2f";
+            display.style.color = "#fff";
+            display.style.borderColor = "rgba(255,255,255,0.8)";
         } else {
             display.innerText = "Pilih file...";
-            display.style.color = "#8a93a6";
+            display.style.color = "rgba(255,255,255,0.4)";
+            display.style.borderColor = "rgba(255,255,255,0.3)";
         }
     }
 
@@ -320,17 +334,13 @@
 
         document.getElementById('formContainer').style.display = 'none';
         document.getElementById('invoicePage').style.display = 'block';
-        
-        // Ubah warna latar belakang body saat pindah ke halaman invoice (Dark mode)
-        document.body.style.backgroundImage = 'none';
-        document.body.style.backgroundColor = '#0d1112';
         window.scrollTo(0, 0);
     }
 
     function downloadPDF() {
         const element = document.getElementById('invoiceContent');
         html2pdf().set({ 
-            margin: 0.2, 
+            margin: 0.1, 
             filename: 'Invoice_Pixme_' + document.getElementById('invNameDisplay').innerText + '.pdf', 
             image: { type: 'jpeg', quality: 0.98 }, 
             html2canvas: { scale: 2 }, 
