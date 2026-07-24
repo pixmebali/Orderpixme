@@ -7,12 +7,11 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <!-- Kombinasi Font dari Gambar 2 (Poppins untuk minimalis modern, Caveat untuk aksen signature/tulisan tangan) -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@300;400;500;600;800&display=swap');
 
         /* =========================================================
-           GLOBAL STYLES & BACKGROUND (Sesuai Gambar 1)
+           GLOBAL STYLES & BACKGROUND
         ========================================================= */
         *, *::before, *::after { box-sizing: border-box; } 
 
@@ -20,19 +19,16 @@
             margin: 0; padding: 0; 
             font-family: 'Poppins', sans-serif; 
             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
-            /* Latar Belakang Gradasi (Teal Gelap ke Peach Terang) */
             background: linear-gradient(135deg, #2b4554 0%, #6e7c85 50%, #e2bcae 100%);
             background-attachment: fixed; color: #fff; overflow-x: hidden;
         }
         
-        /* Efek Noise Halus */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             opacity: 0.15; pointer-events: none; mix-blend-mode: overlay; z-index: -1;
         }
 
-        /* Bola-bola Cahaya Blur (Orbs) di Background */
         .bg-orbs { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; overflow: hidden; }
         .orb-1 { position: absolute; top: 5%; left: 10%; width: 300px; height: 300px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ff8e53); filter: blur(60px); opacity: 0.9; }
         .orb-2 { position: absolute; top: 35%; right: -5%; width: 350px; height: 350px; border-radius: 50%; background: linear-gradient(135deg, #f06292, #81c784); filter: blur(70px); opacity: 0.8; }
@@ -41,41 +37,30 @@
         .container { width: 100%; max-width: 450px; padding: 25px 15px; margin: 0 auto; position: relative; z-index: 1;}
 
         /* =========================================================
-           FORM PAGE (PURE GLASSMORPHISM)
+           FORM PAGE
         ========================================================= */
         .glass-card { 
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.4); 
             border-radius: 24px; padding: 40px 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            width: 100%;
         }
 
-        /* Tipografi Sesuai Gambar 2 */
         .header-logo { text-align: left; margin-bottom: 35px; }
         .header-logo h1 { 
-            font-family: 'Poppins', sans-serif; 
-            color: #fff; margin: 0; font-size: 36px; font-weight: 800;
-            line-height: 1.1; letter-spacing: -1.5px; /* Teks tebal & rapat seperti "notes for today" */
+            font-family: 'Poppins', sans-serif; color: #fff; margin: 0; font-size: 36px; font-weight: 800;
+            line-height: 1.1; letter-spacing: -1.5px;
         }
-        /* Titik kuning bulat seperti di gambar 2 */
         .header-logo h1::after { content: "."; color: #eadd62; }
-        
-        .header-logo p { 
-            font-family: 'Caveat', cursive; /* Font latin / signature */
-            color: #eadd62; /* Kuning aksen */
-            margin: 5px 0 0 0; font-size: 26px; font-weight: 700;
-        }
+        .header-logo p { font-family: 'Caveat', cursive; color: #eadd62; margin: 5px 0 0 0; font-size: 26px; font-weight: 700;}
 
+        /* FIX SUSUNAN KOLOM RESPONSIVE */
         .form-group { margin-bottom: 18px; width: 100%; }
         .row-group { display: flex; flex-direction: row; gap: 12px; width: 100%; margin-bottom: 18px; }
         .row-group .form-group { flex: 1; min-width: 0; margin-bottom: 0; }
 
-        .form-label { 
-            display: block; font-size: 11px; margin-bottom: 6px; 
-            color: rgba(255,255,255,0.8); padding-left: 5px; 
-            font-weight: 500;
-        }
+        .form-label { display: block; font-size: 11px; margin-bottom: 6px; color: rgba(255,255,255,0.8); padding-left: 5px; font-weight: 500;}
 
-        /* Input Glassmorphism Sesuai Gambar 1 */
         .neo-input { 
             width: 100%; box-sizing: border-box; background: rgba(255, 255, 255, 0.1); 
             border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; padding: 14px 15px; 
@@ -87,48 +72,41 @@
         textarea.neo-input { resize: vertical; min-height: 60px; }
         select.neo-input option { background: #3a4a4c; color: #fff; }
 
-        /* Custom File Upload */
         .file-upload-wrapper { position: relative; width: 100%; }
         .file-upload-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
         .file-upload-btn { display: block; width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px dashed rgba(255, 255, 255, 0.4); border-radius: 12px; padding: 14px 15px; text-align: left; font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.6); pointer-events: none; transition: all 0.3s;}
 
         .payment-info { font-size: 12px; text-align: left; color: rgba(255,255,255,0.9); margin: 20px 0; line-height: 1.6; padding: 15px; border-radius: 12px; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1); font-weight: 300;}
         
-        /* Tombol Glassmorphism */
         .neo-button { 
             width: 100%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 15px; padding: 16px; margin-top: 20px; 
             font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: #fff; 
-            letter-spacing: 1px; text-transform: uppercase;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.2s ease; 
+            letter-spacing: 1px; text-transform: uppercase; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.2s ease; 
         }
         .neo-button:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
         #loader { display: none; text-align: center; font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 15px; font-weight: 300;}
 
         /* =========================================================
-           INVOICE PAGE (SAMA DENGAN TEMA FORM)
+           INVOICE PAGE (NO WHITE MARGIN)
         ========================================================= */
         .invoice-page { display: none; width: 100%; min-height: 100vh; padding: 20px 15px; margin: 0 auto; position: relative; z-index: 1;}
-        
         .success-msg { text-align: center; color: #fff; font-weight: 400; font-size: 14px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255,255,255,0.3); max-width: 800px; margin: 0 auto 20px auto; }
         
-        /* Box Invoice utama yang di-print PDF */
+        /* FIX BACKGROUND PUTIH DI PDF: Hilangkan margin, buat kotak jadi rata ujung */
         #invoiceContent { 
             position: relative; max-width: 800px; margin: 0 auto; 
-            /* Memberikan gradasi dan orbs buatan di dalam invoice agar ikut ke-print PDF */
             background: linear-gradient(135deg, #2b4554 0%, #6e7c85 50%, #e2bcae 100%);
-            border-radius: 24px; padding: 40px 25px; color: #fff; overflow: hidden; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.2); 
+            border-radius: 0; padding: 40px 25px; color: #fff; overflow: hidden; 
+            width: 100%; box-sizing: border-box;
         }
 
-        /* Orbs statis khusus untuk PDF render */
         #invoiceContent::before { content: ""; position: absolute; top: -10%; left: -10%; width: 300px; height: 300px; border-radius: 50%; background: #ff8e53; filter: blur(80px); opacity: 0.6; z-index: 0; }
         #invoiceContent::after { content: ""; position: absolute; bottom: -10%; right: -10%; width: 300px; height: 300px; border-radius: 50%; background: #f06292; filter: blur(80px); opacity: 0.5; z-index: 0; }
         
         .inv-glass-panel {
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.3); 
-            border-radius: 20px; padding: 35px 20px; position: relative; z-index: 2; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; padding: 35px 20px; position: relative; z-index: 2; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         .inv-header { text-align: left; margin-bottom: 30px; position: relative; z-index: 2; }
@@ -156,10 +134,10 @@
         .inv-footer { text-align: center; margin-top: 40px; font-size: 18px; font-family: 'Caveat', cursive; font-weight: 600; color: #eadd62; position: relative; z-index: 2;}
 
         .btn-download { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.4); color: white; padding: 15px 20px; border-radius: 15px; font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: block; width: 100%; max-width: 800px; margin: 0 auto 20px auto; text-align: center; transition: all 0.3s; }
-        .btn-download:hover { background: rgba(255, 255, 255, 0.3); }
         
         @media (max-width: 400px) {
-            .glass-card, .inv-glass-panel { padding: 30px 20px; }
+            .glass-card { padding: 30px 15px; }
+            .inv-glass-panel { padding: 25px 15px; }
             .header-logo h1 { font-size: 30px; }
             .neo-input { font-size: 12px; padding: 12px; }
         }
@@ -167,11 +145,8 @@
 </head>
 <body>
 
-<!-- Background Element -->
 <div class="bg-orbs">
-    <div class="orb-1"></div>
-    <div class="orb-2"></div>
-    <div class="orb-3"></div>
+    <div class="orb-1"></div><div class="orb-2"></div><div class="orb-3"></div>
 </div>
 
 <div class="container" id="formContainer">
@@ -265,9 +240,7 @@
             <div class="inv-payment">PEMBAYARAN :<br>Nama : I NYOMAN TRI AGAM W.<br>BCA : 7725351551</div>
         </div>
 
-        <div class="inv-footer">
-            Terima kasih atas kepercayaan anda
-        </div>
+        <div class="inv-footer">Terima kasih atas kepercayaan anda</div>
     </div>
 </div>
 
@@ -362,21 +335,20 @@
         }
 
         document.getElementById('formContainer').style.display = 'none';
-        
-        // Sembunyikan orbs asli dari form agar tidak dobel dengan orbs di PDF
         document.querySelector('.bg-orbs').style.display = 'none'; 
-        
         document.getElementById('invoicePage').style.display = 'block';
         window.scrollTo(0, 0);
     }
 
     function downloadPDF() {
         const element = document.getElementById('invoiceContent');
+        
+        // PENGATURAN BARU: Menghilangkan border margin di sekeliling kertas
         html2pdf().set({ 
-            margin: 0.1, 
+            margin: 0, // Diubah menjadi 0
             filename: 'Invoice_Pixme_' + document.getElementById('invNameDisplay').innerText + '.pdf', 
-            image: { type: 'jpeg', quality: 0.98 }, 
-            html2canvas: { scale: 2 }, 
+            image: { type: 'jpeg', quality: 1 }, 
+            html2canvas: { scale: 2, useCORS: true, logging: true }, 
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
         }).from(element).save();
     }
